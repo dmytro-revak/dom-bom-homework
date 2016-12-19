@@ -1,0 +1,18 @@
+h1 {
+  margin: 0;
+}
+
+.content {
+  background: blue;
+  height: 300px;
+  width: 700px;
+}
+
+#parallax {
+  background: red;
+  width: 700px;
+  background: url(http://www.verticalworld.net/school/programs/uploads/pics/program_108_1.jpg);
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
