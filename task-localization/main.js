@@ -1,11 +1,22 @@
 (function implementLocalization() {
-  setDefaultHash();
   getAllRadioButtons();
-  getCurrentLanguage(radioButtons);
   getAllWelcomeMessages();
+  setDefaultHash();
+  getCurrentLanguage(radioButtons);
 
-  function setDefaultHash() {  
-    location.hash = '';
+  function setDefaultHash() {
+    // debugger;
+    if (location.hash === '') {
+      location.hash = '#ua';
+    $inputfield = document.querySelector('[value="ua"]');
+      $inputfield.checked = true;
+    } else {
+      getLocationHashValue()
+      showLocalizationMessage(welcomeMessages, valueOfHash)
+      $inputfield = document.querySelector('[value="' + valueOfHash + '"]');
+      $inputfield.checked = true;
+    }
+    console.log(location.hash);
   }
 
   //  The next function take all radio buttons, which have atributte "lang" to object
@@ -17,7 +28,7 @@
 
   // The next function get each radio button and take it event listener for changing hash when user click on button also she set 'ua' hash for default greeting
   function getCurrentLanguage(radioButtons) {
-    location.hash = 'ua';
+    // location.hash = 'ua';
     radioButtons.forEach(function(elementOfradioBut) {
       elementOfradioBut.addEventListener("click", function() {
         location.hash = elementOfradioBut.value;
@@ -48,6 +59,7 @@ window.onhashchange = function () {
     }
   }
 
+};
   //  The next function get value of hash without the #;
   var valueOfHash;
   function getLocationHashValue() {
@@ -68,5 +80,4 @@ window.onhashchange = function () {
       }
     }
   }
-};
 })();
