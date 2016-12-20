@@ -5,14 +5,13 @@
   getCurrentLanguage(radioButtons);
 
   function setDefaultHash() {
-    // debugger;
     if (location.hash === '') {
       location.hash = '#ua';
-    $inputfield = document.querySelector('[value="ua"]');
+      $inputfield = document.querySelector('[value="ua"]');
       $inputfield.checked = true;
     } else {
-      getLocationHashValue()
-      showLocalizationMessage(welcomeMessages, valueOfHash)
+      getLocationHashValue();
+      showLocalizationMessage(welcomeMessages, valueOfHash);
       $inputfield = document.querySelector('[value="' + valueOfHash + '"]');
       $inputfield.checked = true;
     }
@@ -58,7 +57,6 @@ window.onhashchange = function () {
       messageItem.classList.remove("visible");
     }
   }
-
 };
   //  The next function get value of hash without the #;
   var valueOfHash;
@@ -68,7 +66,6 @@ window.onhashchange = function () {
   }
 
   // The next function add visible class to messages which I nedd;
-
   function showLocalizationMessage(welcomeMessages, valueOfHash) {
     for (var i = 0; i < welcomeMessages.length; i++) {
       var messageItem =  welcomeMessages[i];
