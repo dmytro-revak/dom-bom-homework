@@ -28,19 +28,14 @@
 
 // The next function get objects from default list and craete all form elements, add attribures which they need and set then in the form
   function createAndAddFormElements(formElementsDefaultList) {
-    var $formElements  = [];
+    var $currentForm = document.querySelector('[name="login"]');
     for (var i = 0; i < formElementsDefaultList.length; i++) {
       var $currentElement = formElementsDefaultList[i];
       var $formElement = document.createElement('input');
       for (var key in $currentElement) {
         $formElement.setAttribute(key, $currentElement[key]);
+        $currentForm.appendChild($formElement);
       }
-      $formElements.push($formElement);
-    }
-
-    var currentForm = document.querySelector('[name="login"]');
-    for (var i = 0; i < $formElements.length; i++) {
-      currentForm.appendChild($formElements[i]);
     }
   }
   // The next function create form and set it in body, before script tags
