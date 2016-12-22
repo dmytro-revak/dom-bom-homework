@@ -1,0 +1,7 @@
+.errorField {
+  border: 2px solid red;
+}
+
+.errorField::-webkit-input-placeholder {
+  color: red;
+}
