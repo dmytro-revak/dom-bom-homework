@@ -127,7 +127,10 @@
             return isFieldsValid;
           },
           'username': function(value) {
-            if (value.indexOf('user_') !== 0 ) {
+            var reg = 'user_';
+            var validateValue = value.replace(reg, '');
+            debugger;
+            if (value.indexOf(reg) !== 0 || validateValue === '') {
               isFieldsValid = false;
               highlightErrorField($currentValidationElement);
             }
