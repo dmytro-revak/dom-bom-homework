@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="reset.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Stop and prevent events</title>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Difference between "stopPropagation()" and "preventDefault()"</h1>
+    </header>
+    <br>
+    <section class="introduction">
+      <h2>Introduction</h2>
+      <br>
+      <p>
+        Дуже часто при написанні сторінок ми використовуємо влкадення одних тегів в інші. Час від часу ми додаємо різні події для цих елементів. 
+        В JavaScript є таке поняття як Bubbling (вспливання). Його зміст полягає в наступному: якщо ми  вішаємо обробник подій на батьківському елементі, аналогічні події будуть фіксуватися і для всіх його дочірніх елементів.
+      </p> 
+      <div class="first-example">
+        <p>Наприклад у наведеному коді клік по будь-якому елементу всередині контейнера призведе до появи "алерту" з відповідним текстом.</p> 
+        <img src="img/example1.png" alt="exp1" class="example">
+      </div>
+      <div class="second-example">
+        <p>"Вспливання" починається з найглибшого дочірнього елемента і поширюється до найвищого (батьківського) елемента по порядку вкладеності.</p>
+        <img src="img/example2.png" alt="exp2" class="example">
+      </div>
+      <br>
+      <h3>Для керування подіями і контролю над "вспливанням" використовуються наступні методи:</h3>
+      <br>
+    </section>   
+
+    <section class="stopPropagation">
+      <h2>The "stopPropagation()" method</h2>
+      <br>
+      <p>
+        Метод "stopPropagation()" використовується для того щоб виконати подію для дочірнього елемента, але зупинити "вспливання" цієї події до всіх інших його батьківських елементів.
+      </p>
+      <br> 
+      <p>1. Приклад без викоритсання "stopPropagation()". При кліку на будь-який з елементів контейнера виконується "алерт", блок на якому відбувся клік змінює колір на жовтий та показує текст "Target", а його батьківські елементи (якщо такі є) змінюють колір на оранжевий.</p>
+      <br>
+      <p>В цьому випадку "вспливанню" нічого не перешкоджає</p>
+      <br> 
+      <div class="withoutStopPropagation">
+        <div id="box1" class="box">
+          <div id="box2" class="box">
+            <div id="box3" class="box">
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <p>2. Приклад з викоритсанням "stopPropagation()". При кліку на будь-який з елементів контейнера виконується "алерт", блонк на якому відбувся клік змінює колір на жовтий та показує текст "Target", але всі його батьківські елементи (якщо такі є) вже не змінюють колір. З ними нічого не відбувається</p>
+      <br>
+      <p>В цьому випадку "вспливання" зупиняється на першому ж елементі.</p>
+      <br> 
+      <div class="withStopPropagation">
+        <div id="box1" class="box">
+          <div id="box2" class="box">
+            <div id="box3" class="box">
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </section>
+    <br>
+    <section class="preventDefault">
+      <h2>The "preventDefault()" method</h2>
+      <br>
+      <p>В JavaScript багато подій викликають за собою певні (дефолтні) дії браузера. Часто коли нам потрібно на такі події поставити власні функції, ці дефолтні дії нам заважають. Метод "preventDefault()" використовується для того щоб відімкнути такі дії. Коли ці дії відімкнені ми можемо писати свою функцію</p>
+      <br>
+      <p>Список дій які є дефолтними: </p>
+      <br/>
+      <ul>
+        <li>mousedown – натиснення на ліву кнопку мишки в час коли курсор знаходится на тексті починає його виділення.</li>
+        <li>click на input type = "checkbox" – ставить чи прибирає галочку.</li>
+        <li>submit – при натисненні на input type = "submit" в формі данні відправляються на сервер.</li>
+        <li>wheel – рух колесиком мишкі ініціює прокрутку.</li>
+        <li>keydown – при натисненні клавіші в полі вводу з'являється символ.</li>
+      </ul>
+      <br/>
+      <p>Нижче наведений приклад з подією contextmenu, яка викликає контексне меню при натисненніна елементі правої кнопки мишки. В даному прикладі контексне меню при натисненні не буде з'являтися. Натомість викликається функція, яка викликає появу "алерта" в якому зазначений колір елемента та rgb цього кольору, на якому була викликана подія.</p>
+      <br>
+        <div class="withpreventDefault">
+        <div id="box1" class="box" data-color="red">
+          <div id="box2" class="box" data-color="green">
+            <div id="box3" class="box" data-color="blue">
+            </div>
+          </div>
+        </div>
+      </div> 
+      <br>
+    </section>
+  </div>
+  <script type="text/javascript" src="main.js"></script>
+</body>
+</html>
