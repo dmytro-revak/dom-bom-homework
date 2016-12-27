@@ -8,6 +8,8 @@
     document.getElementById('player').style.left = '50px';  
   }
 
+  // The following variable saves tha last player moving keycode 
+  var lastKeyCode;
 
   document.body.onkeydown = function (e) {
     var $player = document.getElementById('player');
@@ -28,30 +30,27 @@
     // When verifying has been comlited we change player position. When player gets beyond the borders it loses the game. 
     playerMoving(areCoordinatesCorrect, isKeyCodeCorrect);
 
-
 //-----------------------------------Working area-------------------------------------------------------------------
 
-// The following variable seva tha last player keycode 
-var lastKeyCode;
- var playerCoordinates = $player.getBoundingClientRect();
-createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);
 
-
-
-
-debugger
-var el = document.getElementsByClassName('bullet');
-  setInterval(function() {
-  // var bulletCoordinates = el[i].getBoundingClientRect();
-  el[0].style.left = (parseInt(el[0].style.left) + 10) + 'px';
-  if (parseInt(el[0].style.left) > 1500) {
-  $playerArea.removeChild(el[0]);
-  return false;
+  if (e.keyCode === 32 || e.keyCode === 13) {
+    createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);  
+ // var playerCoordinates = $player.getBoundingClientRect();
   }
-  }, 20);
 
 
 
+
+// debugger
+// var el = document.getElementsByClassName('bullet');
+//   setInterval(function() {
+//   // var bulletCoordinates = el[i].getBoundingClientRect();
+//   el[0].style.left = (parseInt(el[0].style.left) + 10) + 'px';
+//   if (parseInt(el[0].style.left) > 1500) {
+//   $playerArea.removeChild(el[0]);
+//   return false;
+//   }
+//   }, 20);
 
 // var $bullet;
 // for( var i = 0; i < 10; i++){
@@ -95,6 +94,15 @@ function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
   }
 
   parentElement.appendChild($bullet);
+  setInterval(function() {
+  var bulletCoordinates = $bullet.getBoundingClientRect();
+  $bullet.style.left = (parseInt($bullet.style.left) + 10) + 'px';
+  if (parseInt($bullet.style.left) > 500) {
+  $playerArea.removeChild($bullet);
+
+  }
+  }, 20);
+
   return $bullet;
 }
 
@@ -157,7 +165,7 @@ function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
       isKeyCodeCorrect = true;
       lastKeyCode = keyCode;
     }
-    return isKeyCodeCorrect, lastKeyCode;
+    return isKeyCodeCorrect;
   }
 
   // The following function verifies player coordinates and doesn't allow player go beyond the area
