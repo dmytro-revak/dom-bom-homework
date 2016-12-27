@@ -29,6 +29,93 @@
     playerMoving(areCoordinatesCorrect, isKeyCodeCorrect);
 
 
+//-----------------------------------Working area-------------------------------------------------------------------
+
+// The following variable seva tha last player keycode 
+var lastKeyCode;
+ var playerCoordinates = $player.getBoundingClientRect();
+createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);
+
+
+
+
+debugger
+var el = document.getElementsByClassName('bullet');
+  setInterval(function() {
+  // var bulletCoordinates = el[i].getBoundingClientRect();
+  el[0].style.left = (parseInt(el[0].style.left) + 10) + 'px';
+  if (parseInt(el[0].style.left) > 1500) {
+  $playerArea.removeChild(el[0]);
+  return false;
+  }
+  }, 20);
+
+
+
+
+// var $bullet;
+// for( var i = 0; i < 10; i++){
+//   // $bullet.style.left = (parseInt($player.style.left) + 10) + 'px';
+// bulletMoving($bullet);  
+// }
+// function bulletMoving(element) {
+//   setTimeout(function() {
+//   element.style.left = (parseInt($player.style.left) + 10) + 'px';  
+//   }, 1000);
+// }
+
+
+
+
+
+
+// The followinf function creates bullet and sets it before the player
+function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
+  $bullet = document.createElement('div');
+  $bullet.className = "bullet";
+  if (lastKeyCode !== 38 && lastKeyCode !== 40) {
+    $bullet.style.top = playerCoordinates.top + 8 + 'px';
+    if (lastKeyCode === 37) {
+      $bullet.style.left = playerCoordinates.left - 6 + 'px';
+    }
+
+    if (lastKeyCode === 39) {
+      $bullet.style.left = playerCoordinates.left + 22 + 'px'; 
+    }
+  }
+
+  if (lastKeyCode !== 37 && lastKeyCode !== 39) {
+    $bullet.style.left = playerCoordinates.left + 8 + 'px';
+    if(lastKeyCode === 38) {
+      $bullet.style.top = playerCoordinates.top - 6 + 'px';
+    }
+    if(lastKeyCode === 40) {
+      $bullet.style.top = playerCoordinates.top + 22 + 'px';
+    }
+  }
+
+  parentElement.appendChild($bullet);
+  return $bullet;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------Working area-------------------------------------------------------------------
+
     // ----------------------- Start functions descriptions --------------------------------------
 
     // The following function implements player's moving and asks the player to continue the game. 
@@ -37,10 +124,10 @@
         var KEYCODE_LEFT = 37;
         var KEYCODE_RIGHT = 39;
         var KEYCODE_UP = 38;
-        var KEYCODE_DOWN = 40
+        var KEYCODE_DOWN = 40;
         
         if (e.keyCode == KEYCODE_LEFT) {
-          $player.style.left = (parseInt($player.style.left) - 10) + 'px';
+          $player.style.left = (parseInt($player.style.left) - 10) + 'px'; 
         }
         else if (e.keyCode == KEYCODE_RIGHT) {
           $player.style.left = (parseInt($player.style.left) + 10) + 'px';
@@ -53,7 +140,7 @@
         }
       } else {
         if (isKeyCodeCorrect === true) {
-          var wantPlayOneMore = confirm( ('Unfortunately you just have lost. Do yuo want to play one more ?') );
+          var wantPlayOneMore = confirm( ('Unfortunately you just have lost. Do you want to play one more ?') );
           if (wantPlayOneMore) {
             implementTheShootingGame();
           }
@@ -68,8 +155,9 @@
       isKeyCodeCorrect = false;
     } else {
       isKeyCodeCorrect = true;
+      lastKeyCode = keyCode;
     }
-    return isKeyCodeCorrect;
+    return isKeyCodeCorrect, lastKeyCode;
   }
 
   // The following function verifies player coordinates and doesn't allow player go beyond the area
@@ -93,4 +181,5 @@
   // -----------------------End functions descriptions ----------------------------------------------------
 
 }
+
 })();
