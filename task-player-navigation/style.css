@@ -3,9 +3,7 @@ div#player {
   height: 20px;
   border-radius: 25%;
   background: red;
-  
   transition: all 0.3s ease-out 0s;
-  
   position: absolute;
   top: 0px;
   left: 0px;
@@ -20,13 +18,10 @@ div#player {
 }
 
 .bullet {
-    width: 4px;
+  width: 4px;
   height: 4px;
   background: blue;
   border-radius: 50%;
-  
-  transition: all 0.3s ease-out 0s;
-  
   position: absolute;
   top: 0px;
   left: 0px;

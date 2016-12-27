@@ -8,8 +8,10 @@
     document.getElementById('player').style.left = '50px';  
   }
 
-  // The following variable saves tha last player moving keycode 
-  var lastKeyCode;
+  // The following variable saves the last player moving keycode. Default code points to left 
+  var lastKeyCode = 39;
+  // The following array saves all bullets which we have created
+  var bullets = [];
 
   document.body.onkeydown = function (e) {
     var $player = document.getElementById('player');
@@ -29,100 +31,13 @@
 
     // When verifying has been comlited we change player position. When player gets beyond the borders it loses the game. 
     playerMoving(areCoordinatesCorrect, isKeyCodeCorrect);
-
-//-----------------------------------Working area-------------------------------------------------------------------
-
-
-  if (e.keyCode === 32 || e.keyCode === 13) {
-    createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);  
- // var playerCoordinates = $player.getBoundingClientRect();
-  }
-
-
-
-
-// debugger
-// var el = document.getElementsByClassName('bullet');
-//   setInterval(function() {
-//   // var bulletCoordinates = el[i].getBoundingClientRect();
-//   el[0].style.left = (parseInt(el[0].style.left) + 10) + 'px';
-//   if (parseInt(el[0].style.left) > 1500) {
-//   $playerArea.removeChild(el[0]);
-//   return false;
-//   }
-//   }, 20);
-
-// var $bullet;
-// for( var i = 0; i < 10; i++){
-//   // $bullet.style.left = (parseInt($player.style.left) + 10) + 'px';
-// bulletMoving($bullet);  
-// }
-// function bulletMoving(element) {
-//   setTimeout(function() {
-//   element.style.left = (parseInt($player.style.left) + 10) + 'px';  
-//   }, 1000);
-// }
-
-
-
-
-
-
-// The followinf function creates bullet and sets it before the player
-function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
-  $bullet = document.createElement('div');
-  $bullet.className = "bullet";
-  if (lastKeyCode !== 38 && lastKeyCode !== 40) {
-    $bullet.style.top = playerCoordinates.top + 8 + 'px';
-    if (lastKeyCode === 37) {
-      $bullet.style.left = playerCoordinates.left - 6 + 'px';
+    // When user preses enter or space player shoots
+    if (e.keyCode === 32 || e.keyCode === 13) {
+      createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);  
+      bulletMoving(bullets, lastKeyCode);
     }
 
-    if (lastKeyCode === 39) {
-      $bullet.style.left = playerCoordinates.left + 22 + 'px'; 
-    }
-  }
 
-  if (lastKeyCode !== 37 && lastKeyCode !== 39) {
-    $bullet.style.left = playerCoordinates.left + 8 + 'px';
-    if(lastKeyCode === 38) {
-      $bullet.style.top = playerCoordinates.top - 6 + 'px';
-    }
-    if(lastKeyCode === 40) {
-      $bullet.style.top = playerCoordinates.top + 22 + 'px';
-    }
-  }
-
-  parentElement.appendChild($bullet);
-  setInterval(function() {
-  var bulletCoordinates = $bullet.getBoundingClientRect();
-  $bullet.style.left = (parseInt($bullet.style.left) + 10) + 'px';
-  if (parseInt($bullet.style.left) > 500) {
-  $playerArea.removeChild($bullet);
-
-  }
-  }, 20);
-
-  return $bullet;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//-----------------------------------Working area-------------------------------------------------------------------
 
     // ----------------------- Start functions descriptions --------------------------------------
 
@@ -156,38 +71,90 @@ function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
       } 
     }  
 
-  // The following function verifies the player key value 
-  function keyCodevalidation(keyCode) {
-    var correctKeyCodes = [37, 38, 39, 40];
-    if (correctKeyCodes.indexOf(keyCode) === -1) {
-      isKeyCodeCorrect = false;
-    } else {
-      isKeyCodeCorrect = true;
-      lastKeyCode = keyCode;
+    // The following function verifies the player key value 
+    function keyCodevalidation(keyCode) {
+      var correctKeyCodes = [37, 38, 39, 40];
+      if (correctKeyCodes.indexOf(keyCode) === -1) {
+        isKeyCodeCorrect = false;
+      } else {
+        isKeyCodeCorrect = true;
+        lastKeyCode = keyCode;
+      }
+      return isKeyCodeCorrect;
     }
-    return isKeyCodeCorrect;
+
+    // The following function verifies player coordinates and doesn't allow player go beyond the area
+    function comparingPlayerCoordinates(playerAreaCoordinates, playerCoordinates) {
+      if (playerCoordinates.top > playerAreaCoordinates.top && playerCoordinates.top < playerAreaCoordinates.bottom) {
+        var topCoordinates = true;
+      }
+      if (playerCoordinates.left > playerAreaCoordinates.left && playerCoordinates.left < playerAreaCoordinates.right) {
+        var leftCoordinates = true;
+      }
+      if (topCoordinates && leftCoordinates === true) {
+        areCoordinatesCorrect = true;
+      } else {
+        areCoordinatesCorrect = false;
+      }
+      return areCoordinatesCorrect;
+    }
+
+    // The following function moves each bullet and removes it when the bullet comes beyond the page 
+    function bulletMoving(bullets, lastKeyCode) {
+      var $currentBullet =  document.getElementById(bullets.length);
+      var bulletWay = setInterval(function() {
+
+        if (lastKeyCode === 37) {
+          $currentBullet.style.left = ( parseInt($currentBullet.style.left) - 10 ) + 'px';  
+        }
+        if (lastKeyCode === 39) {
+          $currentBullet.style.left = ( parseInt($currentBullet.style.left) + 10 ) + 'px';  
+        }
+        if (lastKeyCode === 38) {
+          $currentBullet.style.top = ( parseInt($currentBullet.style.top) - 10 ) + 'px';  
+        }
+        if (lastKeyCode === 40) {
+          $currentBullet.style.top = ( parseInt($currentBullet.style.top) + 10 ) + 'px';  
+        }
+      
+        if ( parseInt($currentBullet.style.left) > screen.width || parseInt($currentBullet.style.top) > screen.height) {
+          $playerArea.removeChild($currentBullet);
+          clearInterval(bulletWay);
+        }
+      }, 20);
+    }
+
+    // The followinf function creates bullet and sets it before the player
+    function createAndSetBullet(parentElement, playerCoordinates, lastKeyCode) {
+      $bullet = document.createElement('div');
+      bullets.push($bullet);
+      $bullet.id = bullets.length;
+      $bullet.className = 'bullet';
+
+      if (lastKeyCode !== 38 && lastKeyCode !== 40) {
+        $bullet.style.top = playerCoordinates.top + 8 + 'px';
+        if (lastKeyCode === 37) {
+          $bullet.style.left = playerCoordinates.left - 6 + 'px';
+        }
+        if (lastKeyCode === 39) {
+          $bullet.style.left = playerCoordinates.left + 22 + 'px'; 
+        }
+      }
+
+      if (lastKeyCode !== 37 && lastKeyCode !== 39) {
+        $bullet.style.left = playerCoordinates.left + 8 + 'px';
+        if(lastKeyCode === 38) {
+          $bullet.style.top = playerCoordinates.top - 6 + 'px';
+        }
+        if(lastKeyCode === 40) {
+          $bullet.style.top = playerCoordinates.top + 22 + 'px';
+        }
+      }
+      parentElement.appendChild($bullet);
+    }
+
+    // -----------------------End functions descriptions ----------------------------------------------------
+
   }
-
-  // The following function verifies player coordinates and doesn't allow player go beyond the area
-  function comparingPlayerCoordinates(playerAreaCoordinates, playerCoordinates) {
-    if (playerCoordinates.top > playerAreaCoordinates.top && playerCoordinates.top < playerAreaCoordinates.bottom) {
-      var topCoordinates = true;
-    }
-
-    if (playerCoordinates.left > playerAreaCoordinates.left && playerCoordinates.left < playerAreaCoordinates.right) {
-      var leftCoordinates = true;
-    }
-
-    if (topCoordinates && leftCoordinates === true) {
-      areCoordinatesCorrect = true;
-    } else {
-      areCoordinatesCorrect = false;
-    }
-    return areCoordinatesCorrect;
-  }
-
-  // -----------------------End functions descriptions ----------------------------------------------------
-
-}
 
 })();
