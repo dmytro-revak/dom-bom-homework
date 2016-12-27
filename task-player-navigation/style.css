@@ -9,3 +9,11 @@ div#player {
   top: 0px;
   left: 0px;
 }
+
+#playerArea {
+  width: 500px;
+  height: 500px;
+  background: grey;
+  border: 5px solid black;
+  box-sizing: border-box;
+}
