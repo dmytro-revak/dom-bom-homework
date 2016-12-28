@@ -68,9 +68,10 @@ function shootTheTarget(bullets, target) {
     if (topCurrentBulletCoordinat > topTargetCoordinates && leftCurrentBulletCoordinat > leftTargetCoordinates) {
       if (topCurrentBulletCoordinat < bottomTargetCoordinates && leftCurrentBulletCoordinat < rightTargetCoordinates) {
         clearInterval(shootingListener);
-        $playerArea.removeChild($currentBullet);
+        // $playerArea.removeChild($currentBullet);
         $targetArea.removeChild($currentTarget);
-        alert('Yes');
+        var wantPlayOneMore = confirm( ('Well done, adept of evil. Empire has won.  Do you want to kill some humans one more time ') );
+        aksToPlayTheGame(wantPlayOneMore);
       }
     }
   }, 1);
@@ -78,6 +79,11 @@ function shootTheTarget(bullets, target) {
 
 
 
+      function aksToPlayTheGame(wantPlayOneMore) {
+        if (wantPlayOneMore === true) {
+          implementTheShootingGame();
+      }
+    }
 
 
 
