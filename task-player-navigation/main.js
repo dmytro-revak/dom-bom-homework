@@ -13,17 +13,28 @@
   // The following array saves all bullets which we have created
   var bullets = [];
 
-  document.body.onkeydown = function (e) {
+
+
     var $player = document.getElementById('player');
     var $playerArea = document.getElementById('playerArea');
+    var $targetArea = document.getElementById('targetArea');
     // The following variabe saves playing area coordinates
     var playerAreaCoordinates = $playerArea.getBoundingClientRect();
+    // The following variable saves current target area coordinates
+    var targetAreaCoordinates = $targetArea.getBoundingClientRect();
+  
+    // We create target for shooting
+    setTarget(targetArea);
+
+
+  document.body.onkeydown = function (e) {
     // The following variable saves current player coordinates
     var playerCoordinates = $player.getBoundingClientRect();
     // The following variable shows permission for playing
     var areCoordinatesCorrect;
     // The following variable shows permission for player moving
     var isKeyCodeCorrect;
+    
 
     // We verify player and area coordinates and check what key player have pressed
     comparingPlayerCoordinates(playerAreaCoordinates, playerCoordinates);
@@ -37,9 +48,38 @@
       bulletMoving(bullets, lastKeyCode);
     }
 
+// ---------------------------------------WORKING AREA-----------------------------------------------------------------
 
 
-    // ----------------------- Start functions descriptions --------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ---------------------------------------WORKING AREA-----------------------------------------------------------------
+
+    // ----------------------- Start "onkeydown" functions descriptions ----------------------------------------------------------
 
     // The following function implements player's moving and asks the player to continue the game. 
     function playerMoving(areCoordinatesCorrect, isKeyCodeCorrect) {
@@ -153,8 +193,29 @@
       parentElement.appendChild($bullet);
     }
 
-    // -----------------------End functions descriptions ----------------------------------------------------
+    // -----------------------End "onkeydown" functions descriptions -------------------------------------------------------------
 
+  };
+
+  // ----------------------------------- Start "game" functions descriptions -----------------------------------------------------
+  
+  // The following function creates a target and sets it in target area
+  function setTarget(parentElement) {
+    var $target = document.createElement('div');
+    $target.className = 'target';
+    var topAvailablePositions;
+    var leftAvailablePositions;
+    getAvailableCoordinates(targetAreaCoordinates);
+    var topCoordinateForTarget = Math.floor( (Math.random() * topAvailablePositions) + targetAreaCoordinates.top );
+    var leftCoordinateForTarget = Math.floor( (Math.random() * leftAvailablePositions) + targetAreaCoordinates.left );
+    $target.style.top = topCoordinateForTarget + 'px';
+    $target.style.left = leftCoordinateForTarget + 'px';
+    parentElement.appendChild($target);
+
+    function getAvailableCoordinates(targetAreaCoordinates) {
+      topAvailablePositions = targetAreaCoordinates.bottom - targetAreaCoordinates.top;
+      leftAvailablePositions = targetAreaCoordinates.right - targetAreaCoordinates.left;
+    }
   }
 
 })();
