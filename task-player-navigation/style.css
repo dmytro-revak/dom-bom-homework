@@ -43,7 +43,7 @@ div#player {
   box-sizing: border-box;
 }
 
-.target {
+#target {
   width: 40px;
   height: 40px;
   border-radius: 50%;

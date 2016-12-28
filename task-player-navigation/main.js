@@ -26,6 +26,8 @@
     // We create target for shooting
     setTarget(targetArea);
 
+    var $currentTarget = document.getElementById('target');
+
 
   document.body.onkeydown = function (e) {
     // The following variable saves current player coordinates
@@ -46,13 +48,33 @@
     if (e.keyCode === 32 || e.keyCode === 13) {
       createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);  
       bulletMoving(bullets, lastKeyCode);
+      shootTheTarget(bullets, $currentTarget);
     }
 
 // ---------------------------------------WORKING AREA-----------------------------------------------------------------
 
 
 
-
+function shootTheTarget(bullets, target) {
+  // debugger
+  var $currentBullet =  document.getElementById(bullets.length);
+  var shootingListener = setInterval(function() {
+    var topCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().top;
+    var leftCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().left;
+    var topTargetCoordinates = target.getBoundingClientRect().top;
+    var leftTargetCoordinates = target.getBoundingClientRect().left;
+    var bottomTargetCoordinates = target.getBoundingClientRect().bottom;
+    var rightTargetCoordinates = target.getBoundingClientRect().right;
+    if (topCurrentBulletCoordinat > topTargetCoordinates && leftCurrentBulletCoordinat > leftTargetCoordinates) {
+      if (topCurrentBulletCoordinat < bottomTargetCoordinates && leftCurrentBulletCoordinat < rightTargetCoordinates) {
+        clearInterval(shootingListener);
+        $playerArea.removeChild($currentBullet);
+        $targetArea.removeChild($currentTarget);
+        alert('Yes');
+      }
+    }
+  }, 1);
+}
 
 
 
@@ -202,7 +224,7 @@
   // The following function creates a target and sets it in target area
   function setTarget(parentElement) {
     var $target = document.createElement('div');
-    $target.className = 'target';
+    $target.id = 'target';
     var topAvailablePositions;
     var leftAvailablePositions;
     getAvailableCoordinates(targetAreaCoordinates);
