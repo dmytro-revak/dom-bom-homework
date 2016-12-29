@@ -1,32 +1,21 @@
 (function implementTheShootingGame() {
-
+  // Set player on specofoc position 
   setDefaultPlayerCoordinates();
-
-  // The following function set the player for initial coordinates
-  function setDefaultPlayerCoordinates() {
-    document.getElementById('player').style.top = '50px';
-    document.getElementById('player').style.left = '50px';  
-  }
 
   // The following variable saves the last player moving keycode. Default code points to left 
   var lastKeyCode = 39;
   // The following array saves all bullets which we have created
   var bullets = [];
-
-
-
-    var $player = document.getElementById('player');
-    var $playerArea = document.getElementById('playerArea');
-    var $targetArea = document.getElementById('targetArea');
-    // The following variabe saves playing area coordinates
-    var playerAreaCoordinates = $playerArea.getBoundingClientRect();
-    // The following variable saves current target area coordinates
-    var targetAreaCoordinates = $targetArea.getBoundingClientRect();
+  // The following variables save default parameters and objects
+  var $player = document.getElementById('player');
+  var $playerArea = document.getElementById('playerArea');
+  var $targetArea = document.getElementById('targetArea');
+  var playerAreaCoordinates = $playerArea.getBoundingClientRect();
+  var targetAreaCoordinates = $targetArea.getBoundingClientRect();
   
-    // We create target for shooting
-    setTarget(targetArea);
-
-    var $currentTarget = document.getElementById('target');
+  // We create target for shooting and save it in variable
+  setTarget(targetArea);
+  var $currentTarget = document.getElementById('target');
 
 
   document.body.onkeydown = function (e) {
@@ -48,66 +37,12 @@
     if (e.keyCode === 32 || e.keyCode === 13) {
       createAndSetBullet($playerArea, playerCoordinates, lastKeyCode);  
       bulletMoving(bullets, lastKeyCode);
-      shootTheTarget(bullets, $currentTarget);
+      // The following variable saves setInterval function for current bullet
+      var bulletWay;
+      shootTheTarget(bullets, $currentTarget, bulletWay);
     }
 
-// ---------------------------------------WORKING AREA-----------------------------------------------------------------
-
-
-
-function shootTheTarget(bullets, target) {
-  // debugger
-  var $currentBullet =  document.getElementById(bullets.length);
-  var shootingListener = setInterval(function() {
-    var topCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().top;
-    var leftCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().left;
-    var topTargetCoordinates = target.getBoundingClientRect().top;
-    var leftTargetCoordinates = target.getBoundingClientRect().left;
-    var bottomTargetCoordinates = target.getBoundingClientRect().bottom;
-    var rightTargetCoordinates = target.getBoundingClientRect().right;
-    if (topCurrentBulletCoordinat > topTargetCoordinates && leftCurrentBulletCoordinat > leftTargetCoordinates) {
-      if (topCurrentBulletCoordinat < bottomTargetCoordinates && leftCurrentBulletCoordinat < rightTargetCoordinates) {
-        clearInterval(shootingListener);
-        // $playerArea.removeChild($currentBullet);
-        $targetArea.removeChild($currentTarget);
-        var wantPlayOneMore = confirm( ('Well done, adept of evil. Empire has won.  Do you want to kill some humans one more time ') );
-        aksToPlayTheGame(wantPlayOneMore);
-      }
-    }
-  }, 1);
-}
-
-
-
-      function aksToPlayTheGame(wantPlayOneMore) {
-        if (wantPlayOneMore === true) {
-          implementTheShootingGame();
-      }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ---------------------------------------WORKING AREA-----------------------------------------------------------------
-
-    // ----------------------- Start "onkeydown" functions descriptions ----------------------------------------------------------
+    // ----------------------- Start "onkeydown" functions descriptions ------------------------------------------------------
 
     // The following function implements player's moving and asks the player to continue the game. 
     function playerMoving(areCoordinatesCorrect, isKeyCodeCorrect) {
@@ -131,10 +66,9 @@ function shootTheTarget(bullets, target) {
         }
       } else {
         if (isKeyCodeCorrect === true) {
+          $targetArea.removeChild($currentTarget);
           var wantPlayOneMore = confirm( ('Unfortunately you just have lost. Do you want to play one more ?') );
-          if (wantPlayOneMore) {
-            implementTheShootingGame();
-          }
+          aksToPlayTheGame(wantPlayOneMore);
         }
       } 
     }  
@@ -170,8 +104,7 @@ function shootTheTarget(bullets, target) {
     // The following function moves each bullet and removes it when the bullet comes beyond the page 
     function bulletMoving(bullets, lastKeyCode) {
       var $currentBullet =  document.getElementById(bullets.length);
-      var bulletWay = setInterval(function() {
-
+      bulletWay = setInterval(function() {
         if (lastKeyCode === 37) {
           $currentBullet.style.left = ( parseInt($currentBullet.style.left) - 10 ) + 'px';  
         }
@@ -186,8 +119,8 @@ function shootTheTarget(bullets, target) {
         }
       
         if ( parseInt($currentBullet.style.left) > screen.width || parseInt($currentBullet.style.top) > screen.height) {
-          $playerArea.removeChild($currentBullet);
           clearInterval(bulletWay);
+          $playerArea.removeChild($currentBullet);
         }
       }, 20);
     }
@@ -220,13 +153,53 @@ function shootTheTarget(bullets, target) {
       }
       parentElement.appendChild($bullet);
     }
+    // The following function implements player shooting and verifies hitting the targer
+    function shootTheTarget(bullets, target, bulletWay) {
+      // The following variables save target coordinates and setInterval function for current bullet coordinates
+      var $currentBullet =  document.getElementById(bullets.length);
+      var topTargetCoordinates = target.getBoundingClientRect().top;
+      var leftTargetCoordinates = target.getBoundingClientRect().left;
+      var bottomTargetCoordinates = target.getBoundingClientRect().bottom;
+      var rightTargetCoordinates = target.getBoundingClientRect().right;
 
-    // -----------------------End "onkeydown" functions descriptions -------------------------------------------------------------
+      var shootingListener = setInterval(function() {
+        var topCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().top;
+        var leftCurrentBulletCoordinat = $currentBullet.getBoundingClientRect().left;
+        if (topCurrentBulletCoordinat > topTargetCoordinates && leftCurrentBulletCoordinat > leftTargetCoordinates) {
+          if (topCurrentBulletCoordinat < bottomTargetCoordinates && leftCurrentBulletCoordinat < rightTargetCoordinates) {
+            clearInterval(shootingListener);
+            clearInterval(bulletWay);
+            $playerArea.removeChild($currentBullet);
+            $targetArea.removeChild($currentTarget);
+            var wantPlayOneMore = confirm( ('Well done, adept of evil. Empire has won.  Do you want to kill some humans one more time ?') );
+            aksToPlayTheGame(wantPlayOneMore);
+          }
+        }
+      }, 1);
+    }
+    // The following function ask player to continue the game when he lose or win
+    function aksToPlayTheGame(wantPlayOneMore) {
+      if (wantPlayOneMore === true) {
+        implementTheShootingGame();
+      } else {
+        document.body.onkeydown = function (e) {
+          return false;
+        };
+      }
+    }
 
+    // -----------------------End "onkeydown" functions descriptions -------------------------------------------------------
+  
   };
 
-  // ----------------------------------- Start "game" functions descriptions -----------------------------------------------------
+  // ----------------------------------- Start "game" functions descriptions ------------------------------------------------
   
+  // The following function set the player for initial coordinates
+  function setDefaultPlayerCoordinates() {
+    document.getElementById('player').style.top = '50px';
+    document.getElementById('player').style.left = '50px';  
+  }
+
   // The following function creates a target and sets it in target area
   function setTarget(parentElement) {
     var $target = document.createElement('div');
@@ -240,6 +213,7 @@ function shootTheTarget(bullets, target) {
     $target.style.left = leftCoordinateForTarget + 'px';
     parentElement.appendChild($target);
 
+    // The followng function get coordinates which are available for target position
     function getAvailableCoordinates(targetAreaCoordinates) {
       topAvailablePositions = targetAreaCoordinates.bottom - targetAreaCoordinates.top;
       leftAvailablePositions = targetAreaCoordinates.right - targetAreaCoordinates.left;
