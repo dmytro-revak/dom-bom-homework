@@ -117,8 +117,7 @@
         if (lastKeyCode === 40) {
           $currentBullet.style.top = ( parseInt($currentBullet.style.top) + 10 ) + 'px';  
         }
-      
-        if ( parseInt($currentBullet.style.left) > screen.width || parseInt($currentBullet.style.top) > screen.height) {
+        if (parseInt($currentBullet.style.left) > screen.width || parseInt($currentBullet.style.top) > screen.height || parseInt($currentBullet.style.left) < 0 || parseInt($currentBullet.style.top) < 0) {
           clearInterval(bulletWay);
           $playerArea.removeChild($currentBullet);
         }
@@ -133,22 +132,22 @@
       $bullet.className = 'bullet';
 
       if (lastKeyCode !== 38 && lastKeyCode !== 40) {
-        $bullet.style.top = playerCoordinates.top + 8 + 'px';
+        $bullet.style.top = playerCoordinates.top + 27 + 'px';
         if (lastKeyCode === 37) {
-          $bullet.style.left = playerCoordinates.left - 6 + 'px';
+          $bullet.style.left = playerCoordinates.left - 10 + 'px';
         }
         if (lastKeyCode === 39) {
-          $bullet.style.left = playerCoordinates.left + 22 + 'px'; 
+          $bullet.style.left = playerCoordinates.left + 65 + 'px'; 
         }
       }
 
       if (lastKeyCode !== 37 && lastKeyCode !== 39) {
-        $bullet.style.left = playerCoordinates.left + 8 + 'px';
+        $bullet.style.left = playerCoordinates.left + 27 + 'px';
         if(lastKeyCode === 38) {
           $bullet.style.top = playerCoordinates.top - 6 + 'px';
         }
         if(lastKeyCode === 40) {
-          $bullet.style.top = playerCoordinates.top + 22 + 'px';
+          $bullet.style.top = playerCoordinates.top + 65 + 'px';
         }
       }
       parentElement.appendChild($bullet);
@@ -196,8 +195,8 @@
   
   // The following function set the player for initial coordinates
   function setDefaultPlayerCoordinates() {
-    document.getElementById('player').style.top = '50px';
-    document.getElementById('player').style.left = '50px';  
+    document.getElementById('player').style.top = '100px';
+    document.getElementById('player').style.left = '100px';  
   }
 
   // The following function creates a target and sets it in target area
