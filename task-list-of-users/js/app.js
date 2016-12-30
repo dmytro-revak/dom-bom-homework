@@ -1,5 +1,4 @@
 (function implementAddingEmployees() {
-  // debugger
   // The followind variables saves the page elements which we will use later 
   var $addEmployeeButton = document.querySelector('.addEmployee');
   var $employeeList = document.querySelector('.employeeList');
@@ -7,12 +6,24 @@
 
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
+    debugger
     // We veryfies employee information
     var isAllFieldsCorrect = true;
     fieldsValidation($inputFields);
+    createTheEmployeeItem($inputFields, $employeeList);
   });
 
-
+function createTheEmployeeItem($inputFields, parentElement) {
+    var $item = document.createElement('li');
+  for (var i = 0; i < $inputFields.length; i++) {
+    var currentInputElement = $inputFields[i];
+    var $itemSpan = document.createElement('span');
+    $itemSpan.className = 'employee' + currentInputElement.name; 
+    $itemSpan.textContent = currentInputElement.value + ' ';
+    $item.appendChild($itemSpan);
+  }
+    parentElement.appendChild($item);
+}
 
     // addingNewEmployee(addingFields);
 // addingNewEmployee(addingFields);
@@ -52,15 +63,18 @@
           return false;
         }
         var currentValue = value.replace(onlyText, '');
-        if (currentValue) {
+        if (currentValue === false) {
           alert('The First name, Second name and Position fields have to contain only letters');        
           isCurrentFieldCorrect = false;
         }
       },
       'salary' : function (value) {
+        var salaryStart = '$ ';
         var onlyNumbers = /[0-9]/g;
+        var isSalaryStart = value.indexOf(salaryStart);
         var currentValue = value.replace(onlyNumbers, '');
-        if (currentValue) {
+        currentValue = currentValue.replace(salaryStart, '');
+        if (currentValue !== '$ ' || isSalaryStart !== 0) {
           isCurrentFieldCorrect = false;
           alert('The Salary field have to contain only digits');
           return false;
@@ -95,8 +109,7 @@
           isAllFieldsCorrect = false;
         }
       }
-    }
-    return isAllFieldsCorrect; 
+    } 
   }
 
 
