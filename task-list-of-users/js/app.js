@@ -6,43 +6,20 @@
 
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
-    debugger
-    // We veryfies employee information
-    var isAllFieldsCorrect = true;
+    // We veryfies employee information and add new employee when it's all right
     fieldsValidation($inputFields);
-    createTheEmployeeItem($inputFields, $employeeList);
+    if (isAllFieldsCorrect === true) {
+      createTheEmployeeItem($inputFields, $employeeList);
+    }
   });
-
-function createTheEmployeeItem($inputFields, parentElement) {
-    var $item = document.createElement('li');
-  for (var i = 0; i < $inputFields.length; i++) {
-    var currentInputElement = $inputFields[i];
-    var $itemSpan = document.createElement('span');
-    $itemSpan.className = 'employee' + currentInputElement.name; 
-    $itemSpan.textContent = currentInputElement.value + ' ';
-    $item.appendChild($itemSpan);
-  }
-    parentElement.appendChild($item);
-}
-
-    // addingNewEmployee(addingFields);
-// addingNewEmployee(addingFields);
-
-// var newSpansFotList = [];
-// function addingNewEmployee(addingFields) {
-//   for (var i = 0; i < addingFields.length; i++) {
-//     newSpansFotList.push(addingFields[i].value);
-//   }
-// }
-
-// debugger
 
 
 
 
 //----------------------------------Start functions description---------------------------------------------------------------
 
-  //  The following function verifies user employee information and allows to add it to list
+  // The following function verifies user employee information and saves allow to add it to list in variable
+  var isAllFieldsCorrect = true;
   function fieldsValidation(inputFields) {
     
     var isCurrentFieldCorrect = true;
@@ -63,18 +40,15 @@ function createTheEmployeeItem($inputFields, parentElement) {
           return false;
         }
         var currentValue = value.replace(onlyText, '');
-        if (currentValue === false) {
+        if (currentValue) {
           alert('The First name, Second name and Position fields have to contain only letters');        
           isCurrentFieldCorrect = false;
         }
       },
       'salary' : function (value) {
-        var salaryStart = '$ ';
         var onlyNumbers = /[0-9]/g;
-        var isSalaryStart = value.indexOf(salaryStart);
         var currentValue = value.replace(onlyNumbers, '');
-        currentValue = currentValue.replace(salaryStart, '');
-        if (currentValue !== '$ ' || isSalaryStart !== 0) {
+        if (currentValue) {
           isCurrentFieldCorrect = false;
           alert('The Salary field have to contain only digits');
           return false;
@@ -101,8 +75,6 @@ function createTheEmployeeItem($inputFields, parentElement) {
           } else {
             salary(currentInputElementValue);
           }
-        } else {
-          isAllFieldsCorrect = false;
         }
 
         if (isCurrentFieldCorrect === false) {
@@ -112,6 +84,22 @@ function createTheEmployeeItem($inputFields, parentElement) {
     } 
   }
 
+  // The following function creats list item (new employee) and sets it in factory list 
+  function createTheEmployeeItem($inputFields, parentElement) {
+    var $item = document.createElement('li');
+    for (var i = 0; i < $inputFields.length; i++) {
+      var currentInputElement = $inputFields[i];
+      var $itemSpan = document.createElement('span');
+      $itemSpan.className = 'employee' + currentInputElement.name; 
+      if (currentInputElement.name === 'Salary') {
+        $itemSpan.textContent = '$ ' + currentInputElement.value + ' ';    
+      } else {
+        $itemSpan.textContent = currentInputElement.value + ' ';
+      }
+      $item.appendChild($itemSpan);
+    }
+    parentElement.appendChild($item);
+  }
 
 
 //----------------------------------End functions description-----------------------------------------------------------------
