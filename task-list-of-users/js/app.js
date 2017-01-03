@@ -1,17 +1,38 @@
 (function implementAddingEmployees() {
+  
   // The followind variables saves the page elements which we will use later 
   var $addEmployeeButton = document.querySelector('.addEmployee');
   var $employeeList = document.querySelector('.employeeList');
   var $inputFields = document.querySelectorAll('.newEmployeeField input[type="text"]');
+  var $setMaxAmountButton = document.querySelector('div.maxAmountOfEmployees button');
+  var $maxAmountNumberSpan = document.getElementById('maxAmount');
+  var $maxAmountInput = document.querySelector('input[name="setMaxAmount"]');
+  
+  // The following variable notices permission to add new employee
+  var isMaxAmountCorrect;
 
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
-    // We veryfies employee information and add new employee when it's all right
-    fieldsValidation($inputFields);
-    if (isAllFieldsCorrect === true) {
-      createTheEmployeeItem($inputFields, $employeeList);
+    // We check max amount
+    verifyTheMaxAmount();
+    if (isMaxAmountCorrect) {
+      // We veryfies employee information and add new employee when it's all right
+      fieldsValidation($inputFields);
+      if (isAllFieldsCorrect === true) {
+        createTheEmployeeItem($inputFields, $employeeList);
+      }
+    } else {
+      alert('Sorry, but we cannot hire one more employee now');
     }
   });
+
+  // We add click listenet for max amount button
+  $setMaxAmountButton.addEventListener('click', function() {
+    setMaxAmountNumber();    
+  });
+
+
+
 
 
 
@@ -99,6 +120,30 @@
       $item.appendChild($itemSpan);
     }
     parentElement.appendChild($item);
+  }
+
+  // The following function verifies current max employee amount and notices user about that
+  function verifyTheMaxAmount() {
+    var currentMaxAmount =  parseInt($maxAmountNumberSpan.innerText, 10);
+    isMaxAmountCorrect = currentMaxAmount <= 10 ? true : false; 
+  }
+
+  // The following function allows user to set max amount of employees. It verifies user value and creates the correct span
+  function setMaxAmountNumber() {
+    var onlyNumbers = /[0-9]/g;
+    var newMaxAmount = $maxAmountInput.value.replace(onlyNumbers, '');
+    if (!newMaxAmount) {
+      newMaxAmount = parseInt($maxAmountInput.value, 10);
+      if ( !isNaN(newMaxAmount) ) {
+        $maxAmountNumberSpan.removeChild($maxAmountNumberSpan.firstChild);
+        var $amountTextNode = document.createTextNode(newMaxAmount);
+        $maxAmountNumberSpan.appendChild($amountTextNode);
+      } else {
+        alert('Please, fill the field');
+      }
+    } else {
+      alert('Please, enter only number');
+    }  
   }
 
 
