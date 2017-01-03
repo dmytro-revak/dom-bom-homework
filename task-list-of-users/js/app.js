@@ -1,5 +1,4 @@
 (function implementAddingEmployees() {
-  
   // The followind variables saves the page elements which we will use later 
   var $addEmployeeButton = document.querySelector('.addEmployee');
   var $employeeList = document.querySelector('.employeeList');
@@ -7,7 +6,9 @@
   var $setMaxAmountButton = document.querySelector('div.maxAmountOfEmployees button');
   var $maxAmountNumberSpan = document.getElementById('maxAmount');
   var $maxAmountInput = document.querySelector('input[name="setMaxAmount"]');
-  
+  var $totalNumber = document.getElementById('totalNumber');
+  var $averageSalary = document.getElementById('averageSalary');
+
   // The following variable notices permission to add new employee
   var isMaxAmountCorrect;
 
@@ -20,6 +21,8 @@
       fieldsValidation($inputFields);
       if (isAllFieldsCorrect === true) {
         createTheEmployeeItem($inputFields, $employeeList);
+        // We count all employees and their average salary
+        setTotalEmployeesNumberAndAverageSalary();
       }
     } else {
       alert('Sorry, but we cannot hire one more employee now');
@@ -125,7 +128,9 @@
   // The following function verifies current max employee amount and notices user about that
   function verifyTheMaxAmount() {
     var currentMaxAmount =  parseInt($maxAmountNumberSpan.innerText, 10);
-    isMaxAmountCorrect = currentMaxAmount <= 10 ? true : false; 
+    var employeesItems = document.querySelectorAll('ul.employeeList li');
+    var currentEmployees = employeesItems.length;
+    isMaxAmountCorrect = currentEmployees < currentMaxAmount ? true : false; 
   }
 
   // The following function allows user to set max amount of employees. It verifies user value and creates the correct span
@@ -146,7 +151,50 @@
     }  
   }
 
+  // The following function set the total employees number and count their average salary
+  var averageEmployeesSalary;
+  function setTotalEmployeesNumberAndAverageSalary() {
+    var employeesItems = document.querySelectorAll('ul.employeeList li');
+    
+    $totalNumber.removeChild($totalNumber.firstChild);
+    var $totalNumberTextNode = document.createTextNode(employeesItems.length);
+    $totalNumber.appendChild($totalNumberTextNode);
 
+    getAverageSalary(employeesItems);
+    $averageSalary.removeChild($averageSalary.firstChild);
+    var $averageSalaryTextNode = document.createTextNode(averageEmployeesSalary);
+    $averageSalary.appendChild($averageSalaryTextNode);
+  }
+
+  // The following function count average employees salary 
+  function getAverageSalary(employeesItems) {
+    var eachEmployeesSalary = [];
+    var totalEmployeesSalary = 0;
+    
+    var notDigits = /\D/g;
+    for (var i = 0; i < employeesItems.length; i++) {
+      var currentEmployeeSalary = parseInt( employeesItems[i].innerText.replace(notDigits, '') );
+      eachEmployeesSalary.push(currentEmployeeSalary);
+    }
+
+    eachEmployeesSalary.forEach(function (employeeSalary) {
+      totalEmployeesSalary += employeeSalary;
+    }); 
+
+    averageEmployeesSalary = totalEmployeesSalary / eachEmployeesSalary.length;
+    averageEmployeesSalary = parseFloat( averageEmployeesSalary.toFixed(2) );
+      
+  }
+
+
+
+
+
+
+
+
+
+  
 //----------------------------------End functions description-----------------------------------------------------------------
 
 
