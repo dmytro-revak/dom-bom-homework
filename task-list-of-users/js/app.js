@@ -15,15 +15,20 @@
   var salaryPermission;
   // The following variable notices permission to add new employee
   var isMaxAmountCorrect;
-  // The following variable notices about vakidation status
+  // The following variable notices about validation status
   var isAllFieldsCorrect;
-
+  // The following variable notices about First/Last name duplicates
+  var doesDuplicatesExist;
+//----------------
+//-----------------
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
     isAllFieldsCorrect = true;
     // We veryfies employee information and add new employee when it's all right
     fieldsValidation($inputFields);
     if (isAllFieldsCorrect === true) {
+      verifyDuplicates($inputFields);
+      if (!doesDuplicatesExist) {
       // We check average salary
       verifyAverageSalary($inputFields);
       // We check max amount
@@ -36,6 +41,7 @@
         alert('Sorry, but we cannot hire one more employee now');
       }
     }
+  }
   });
 
   // We add click listenet for max amount button
@@ -44,7 +50,34 @@
   });
 
 
-
+function verifyDuplicates($inputFields) {
+    debugger
+  doesDuplicatesExist = false;
+  var employeesFirstNameElements = document.getElementsByClassName('employeeFirstName');
+  var employeesFirstNames = [];
+  for (var i = 0; i < employeesFirstNameElements.length; i++) {
+    var currentUserFirstName = employeesFirstNameElements[i].innerText;
+    employeesFirstNames.push(currentUserFirstName);
+  }
+  var newEmployeeFirstName = $inputFields[0].value;
+  employeesFirstNames.forEach(function (employeeFirstName) {
+    if (newEmployeeFirstName === employeeFirstName) {
+      var employeesLastNameElements = document.getElementsByClassName('employeeLastName');
+      var employeesLastNames = [];
+      for (var i = 0; i < employeesLastNameElements.length; i++) {
+        var currentUserLastName = employeesLastNameElements[i].innerText;
+        employeesLastNames.push(currentUserLastName);
+      }
+      var newEmployeeLastName = $inputFields[1].value;
+      employeesLastNames.forEach(function (employeeLastName) {
+        if (newEmployeeLastName === employeeLastName) {
+          alert('Error! This employee already exists');
+          doesDuplicatesExist = true;
+        }
+      })
+    }
+  });
+}
 
 
 //----------------------------------Start functions description---------------------------------------------------------------
