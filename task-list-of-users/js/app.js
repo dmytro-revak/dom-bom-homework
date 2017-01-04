@@ -8,15 +8,21 @@
   var $maxAmountInput = document.querySelector('input[name="setMaxAmount"]');
   var $totalNumber = document.getElementById('totalNumber');
   var $averageSalary = document.getElementById('averageSalary');
+  var $employeesItems = document.querySelectorAll('ul.employeeList li');
 
+  var averageEmployeesSalary;
+  // The following valiable saves salary permission for adding new employee
+  var salaryPermission;
   // The following variable notices permission to add new employee
   var isMaxAmountCorrect;
 
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
+    // We check average salary
+    verifyAverageSalary($inputFields);
     // We check max amount
     verifyTheMaxAmount();
-    if (isMaxAmountCorrect) {
+    if (isMaxAmountCorrect && salaryPermission) {
       // We veryfies employee information and add new employee when it's all right
       fieldsValidation($inputFields);
       if (isAllFieldsCorrect === true) {
@@ -33,8 +39,6 @@
   $setMaxAmountButton.addEventListener('click', function() {
     setMaxAmountNumber();    
   });
-
-
 
 
 
@@ -128,8 +132,8 @@
   // The following function verifies current max employee amount and notices user about that
   function verifyTheMaxAmount() {
     var currentMaxAmount =  parseInt($maxAmountNumberSpan.innerText, 10);
-    var employeesItems = document.querySelectorAll('ul.employeeList li');
-    var currentEmployees = employeesItems.length;
+    $employeesItems = document.querySelectorAll('ul.employeeList li');
+    var currentEmployees = $employeesItems.length;
     isMaxAmountCorrect = currentEmployees < currentMaxAmount ? true : false; 
   }
 
@@ -152,28 +156,27 @@
   }
 
   // The following function set the total employees number and count their average salary
-  var averageEmployeesSalary;
   function setTotalEmployeesNumberAndAverageSalary() {
-    var employeesItems = document.querySelectorAll('ul.employeeList li');
+    $employeesItems = document.querySelectorAll('ul.employeeList li');
     
     $totalNumber.removeChild($totalNumber.firstChild);
-    var $totalNumberTextNode = document.createTextNode(employeesItems.length);
+    var $totalNumberTextNode = document.createTextNode($employeesItems.length);
     $totalNumber.appendChild($totalNumberTextNode);
 
-    getAverageSalary(employeesItems);
+    getAverageSalary($employeesItems);
     $averageSalary.removeChild($averageSalary.firstChild);
     var $averageSalaryTextNode = document.createTextNode(averageEmployeesSalary);
     $averageSalary.appendChild($averageSalaryTextNode);
   }
 
   // The following function count average employees salary 
-  function getAverageSalary(employeesItems) {
+  function getAverageSalary($employeesItems) {
     var eachEmployeesSalary = [];
     var totalEmployeesSalary = 0;
     
     var notDigits = /\D/g;
-    for (var i = 0; i < employeesItems.length; i++) {
-      var currentEmployeeSalary = parseInt( employeesItems[i].innerText.replace(notDigits, '') );
+    for (var i = 0; i < $employeesItems.length; i++) {
+      var currentEmployeeSalary = parseInt( $employeesItems[i].innerText.replace(notDigits, '') );
       eachEmployeesSalary.push(currentEmployeeSalary);
     }
 
@@ -184,6 +187,18 @@
     averageEmployeesSalary = totalEmployeesSalary / eachEmployeesSalary.length;
     averageEmployeesSalary = parseFloat( averageEmployeesSalary.toFixed(2) );
       
+  }
+
+  // The following function verifies average salary and new employee salary for adding a new employee
+  function verifyAverageSalary($inputFields) {
+    var newEmployeeSalary = parseInt($inputFields[2].value);
+    getAverageSalary($employeesItems);
+    var possibleAverageEmployeesSalary = (averageEmployeesSalary * $employeesItems.length + newEmployeeSalary) / ($employeesItems.length + 1);
+    if (possibleAverageEmployeesSalary > 2000) {
+      salaryPermission = false;
+    } else {
+      salaryPermission = true;
+    }
   }
 
 
