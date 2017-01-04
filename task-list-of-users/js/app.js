@@ -15,23 +15,26 @@
   var salaryPermission;
   // The following variable notices permission to add new employee
   var isMaxAmountCorrect;
+  // The following variable notices about vakidation status
+  var isAllFieldsCorrect;
 
   // We add click listenet for add button
   $addEmployeeButton.addEventListener('click', function() {
-    // We check average salary
-    verifyAverageSalary($inputFields);
-    // We check max amount
-    verifyTheMaxAmount();
-    if (isMaxAmountCorrect && salaryPermission) {
-      // We veryfies employee information and add new employee when it's all right
-      fieldsValidation($inputFields);
-      if (isAllFieldsCorrect === true) {
+    isAllFieldsCorrect = true;
+    // We veryfies employee information and add new employee when it's all right
+    fieldsValidation($inputFields);
+    if (isAllFieldsCorrect === true) {
+      // We check average salary
+      verifyAverageSalary($inputFields);
+      // We check max amount
+      verifyTheMaxAmount();
+      if (isMaxAmountCorrect && salaryPermission) {
         createTheEmployeeItem($inputFields, $employeeList);
         // We count all employees and their average salary
         setTotalEmployeesNumberAndAverageSalary();
+      } else {
+        alert('Sorry, but we cannot hire one more employee now');
       }
-    } else {
-      alert('Sorry, but we cannot hire one more employee now');
     }
   });
 
@@ -47,7 +50,6 @@
 //----------------------------------Start functions description---------------------------------------------------------------
 
   // The following function verifies user employee information and saves allow to add it to list in variable
-  var isAllFieldsCorrect = true;
   function fieldsValidation(inputFields) {
     
     var isCurrentFieldCorrect = true;
