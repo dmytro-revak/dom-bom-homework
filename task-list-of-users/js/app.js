@@ -153,13 +153,15 @@ function verifyDuplicates($inputFields) {
     for (var i = 0; i < $inputFields.length; i++) {
       var currentInputElement = $inputFields[i];
       var $itemSpan = document.createElement('span');
+      var $spaceBar = document.createTextNode(' ');
       $itemSpan.className = 'employee' + currentInputElement.name; 
       if (currentInputElement.name === 'Salary') {
-        $itemSpan.textContent = '$ ' + currentInputElement.value + ' ';    
+        $itemSpan.textContent = '$ ' + currentInputElement.value;    
       } else {
-        $itemSpan.textContent = currentInputElement.value + ' ';
+        $itemSpan.textContent = currentInputElement.value;
       }
       $item.appendChild($itemSpan);
+      $item.appendChild($spaceBar);
     }
     parentElement.appendChild($item);
   }
