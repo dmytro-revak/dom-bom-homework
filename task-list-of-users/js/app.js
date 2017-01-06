@@ -67,13 +67,13 @@
         var firstUppercase = /^[А-ЯёЁA-Z]/;
         var onlyText = /[а-яА-ЯёЁa-zA-Z]/g;
         if (value.match(firstUppercase) === null) {
-          alert('The First name and Second name have to begin with uppercase');
+          alert('The First name, Second name and  Position have to begin with uppercase');
           isCurrentFieldCorrect = false;
           return false;
         }
         var currentValue = value.replace(onlyText, '');
         if (currentValue) {
-          alert('The First name, Second name and Position fields have to contain only letters');        
+          alert('The First name, Second name and  Position have to begin with uppercase');        
           isCurrentFieldCorrect = false;
         }
       },
